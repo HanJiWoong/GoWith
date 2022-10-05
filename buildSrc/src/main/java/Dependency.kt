@@ -67,3 +67,11 @@ object CameraX {
     const val CAMERA_VIEW = "androidx.camera:camera-view:1.1.0"
     const val CAMERA_EXTENTIONS = "androidx.camera:camera-extensions:1.1.0"
 }
+
+object NavComponent {
+    const val NAVIGATION_FRAGMENT = "androidx.navigation:navigation-fragment-ktx:$NAV_VERSION"
+    const val NAVIGATION_UI = "androidx.navigation:navigation-ui-ktx:$NAV_VERSION"
+    const val NAVIGATION_DYNAMIC_FEATURES_FRAGMENT = "androidx.navigation:navigation-dynamic-features-fragment:$NAV_VERSION"
+    const val NAVIGATION_TESING = "androidx.navigtion:navgation-testing:$NAV_VERSION"
+    const val NAVIGATION_COMPOS = "androidx.navigation:navigation-compose:2.5.2"
+}

@@ -1,16 +1,18 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
     namespace 'com.mtis.gowith'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.mtis.gowith"
         minSdk 28
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -30,15 +32,59 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
+    implementation project(":data")
+    implementation project(":domain")
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation (KTX.CORE)
+    implementation (AndroidX.APP_COMPAT)
+    implementation (Google.MATERIAL)
+    implementation (AndroidX.CONSTRAINT_LAYOUT)
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // dagger hilt
+    implementation(DaggerHilt.DAGGER_HILT)
+    kapt (DaggerHilt.DAGGER_HILT_COMPILER)
+
+    kapt (DaggerHilt.DAGGER_HILT_ANDROIDX_COMPILER)
+
+    // View Model
+    implementation(AndroidX.LIFECYCLE_VIEW_MODEL)
+
+    // Live Data
+    implementation(AndroidX.LIFECYCLE_LIVEDATA)
+
+    // Retrofit
+    implementation(Retrofit.RETROFIT)
+    implementation(Retrofit.CONVERTER_GSON)
+    implementation(Retrofit.CONVERTER_JAXB)
+
+    // okHttp
+    implementation(OkHttp.OKHTTP)
+    implementation(OkHttp.LOGGING_INTERCEPTOR)
+
+    // coroutines
+    implementation(Coroutions.COROUTINES)
+
+    // by viewModel
+    implementation(AndroidX.ACTIVITY)
+    implementation(AndroidX.FRAGMENT)
+
+    //nav component
+    implementation(NavComponent.NAVIGATION_FRAGMENT)
+    implementation(NavComponent.NAVIGATION_UI)
+    implementation(NavComponent.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+    androidTestImplementation(NavComponent.NAVIGATION_TESING)
+    implementation(NavComponent.NAVIGATION_COMPOS)
+
+    // database
+    implementation(AndroidX.DATABASE)
 }
