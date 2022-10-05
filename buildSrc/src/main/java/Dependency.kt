@@ -46,14 +46,14 @@ object DaggerHilt {
 }
 
 object Retrofit {
-    const val RETROFIT = "com.squreup.retrofit2:retrofit:2.9.0"
-    const val CONVERTER_GSON = "com.squreup.retrofit2:converter-gson:2.9.0"
-    const val CONVERTER_JAXB = "com.squreup.retrofit2:converter-jaxb:2.9.0"
+    const val RETROFIT = "com.squareup.retrofit2:retrofit:2.9.0"
+    const val CONVERTER_GSON = "com.squareup.retrofit2:converter-gson:2.9.0"
+    const val CONVERTER_JAXB = "com.squareup.retrofit2:converter-jaxb:2.9.0"
 }
 
 object OkHttp {
-    const val OKHTTP = "com.squreup.okhttp3:okhttp:4.9.1"
-    const val LOGGING_INTERCEPTOR = "com.squreup.okhttp3:logging-interceptor:4.9.1"
+    const val OKHTTP = "com.squareup.okhttp3:okhttp:4.9.1"
+    const val LOGGING_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor:4.9.1"
 }
 
 object Coroutions {
