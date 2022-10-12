@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">GoWith</string>
+    <string name="app_name">동행</string>
+    <string name="str_back_press_warning_toast">뒤로가기 버튼을 한번 더 누르면 종료됩니다.</string>
+    <string name="push_default_channel">72427</string>
+
+
+    // splash
+    <string name="main_splash_text">동행과 함께 여정을\n시작하세요.</string>
+    <string name="main_splash_copyright">RoadWe Inc.\nAll Rights Reserved</string>
+
+    // 권한 요청 문구
+    <string name="str_permission_request_title_album">사진 사용을 위한 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_album">프로필 등의 수정을 위해 사진 앨범에 대한 내부 저장소 접근이 필요합니다.</string>
+    <string name="str_permission_request_title_location">버스 공유를 위한 위치 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_location">버스 공유를 위해 내 위치를 알 수 있는 위치 권한이 필요합니다. \"앱사용시허용\"으로 선택해주세요.</string>
+    <string name="str_permission_request_title_nfc">nfc 사용을 위한 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_nfc">버스 태깅 등을 위한 nfc 사용 권한이 필요합니다.</string>
+    <string name="str_permission_request_title_bluetooth">블루투스 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_bluetooth">장비 연동을 위한 블루투스 권한이 필요합니다.</string>
+    <string name="str_permission_request_title_contact">연락처 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_contact">주변 동료에게 공유하기 위해 연락처 권한이 필요합니다.</string>
+    <string name="str_permission_request_title_notification">알림 권한이 필요합니다.</string>
+    <string name="str_permission_request_message_notification">승하차 알림을 위한 알림 권한이 필요합니다.</string>
+
 </resources>

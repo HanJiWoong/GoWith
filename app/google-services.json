@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "972883982563",
+    "project_id": "gowith-45e8d",
+    "storage_bucket": "gowith-45e8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972883982563:android:5da52cae9338dc9ffd2dd6",
+        "android_client_info": {
+          "package_name": "com.mtis.gowith"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972883982563-bskkqfdi87uj7licgth081vva7ldktri.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mtis.gowith",
+            "certificate_hash": "e1be5409f7f4017aa2d23505df318eb74fa02fb7"
+          }
+        },
+        {
+          "client_id": "972883982563-ki4qv7flo7eu0pbf1qquqba68nbglhdn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2pkTF6-m_8DlzgYejqJIsSCRu2yknhOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972883982563-ki4qv7flo7eu0pbf1qquqba68nbglhdn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

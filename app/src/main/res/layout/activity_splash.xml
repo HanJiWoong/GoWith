@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.mtis.gowith.view.activity.SplashActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_splash_bg"
+        tools:context=".view.activity.SplashActivity">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="160dp"
+            android:layout_marginStart="50dp"
+            android:src="@drawable/main_splash_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.1944"
+            app:layout_constraintDimensionRatio="h,7:5" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_splash_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:text="@string/main_splash_text"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            app:layout_constraintTop_toBottomOf="@id/main_splash_logo"
+            app:layout_constraintStart_toStartOf="@id/main_splash_logo"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_splash_copyright"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:textColor="#86A8EC"
+            android:text="@string/main_splash_copyright"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/main_splash_logo"/>
+        
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_rail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="7dp"
+            android:src="@drawable/main_splash_rail"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="w,111:800"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_cloude_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/main_splash_cloude_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,120:215"
+            app:layout_constraintWidth_percent="0.333"
+            app:layout_constraintVertical_bias="0.193162393"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_cloude_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/main_splash_cloude_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,190:182"
+            app:layout_constraintWidth_percent="0.527777778"
+            app:layout_constraintVertical_bias="0.542071197"
+            app:layout_constraintHorizontal_bias="0.370588235"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_cloude_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/main_splash_cloude_3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,200:239"
+            app:layout_constraintWidth_percent="0.527777778"
+            app:layout_constraintVertical_bias="0.657754011"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_splash_cloude_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/main_splash_cloude_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,219:127"
+            app:layout_constraintWidth_percent="0.608333333"
+            app:layout_constraintHorizontal_bias="1.074468085"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,7 +1,7 @@
 import Versions.NAV_VERSION
 
 object Versions {
-    const val NAV_VERSION = "2.4.0-alpah10"
+    const val NAV_VERSION = "2.4.0-alpha10"
 }
 
 object kotlin {
@@ -29,7 +29,7 @@ object Google {
 }
 
 object TEST {
-    const val JUNIT = "junit.junit:4.+"
+    const val JUNIT = "junit:junit:4.+"
     const val ANDROID_JUNIT_RUNNER = "AndroidJUnitRunner"
 }
 
@@ -42,7 +42,7 @@ object AndroidTest {
 object DaggerHilt {
     const val DAGGER_HILT = "com.google.dagger:hilt-android:2.44"
     const val DAGGER_HILT_COMPILER = "com.google.dagger:hilt-android-compiler:2.44"
-    const val DAGGER_HILT_ANDROIDX_COMPILER = "andoridx.hilt:hilt-compiler:1.0.0"
+    const val DAGGER_HILT_ANDROIDX_COMPILER = "androidx.hilt:hilt-compiler:1.0.0"
 }
 
 object Retrofit {
@@ -57,7 +57,7 @@ object OkHttp {
 }
 
 object Coroutions {
-    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-corourines-android:1.5.2"
+    const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 }
 
 object CameraX {
