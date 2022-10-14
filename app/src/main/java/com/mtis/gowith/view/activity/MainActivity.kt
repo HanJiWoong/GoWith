@@ -1,35 +1,46 @@
 package com.mtis.gowith.view.activity
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
-import android.provider.Settings
+import android.os.Build
 import android.util.Log
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.View
+import android.webkit.*
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.loader.app.LoaderManager
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.mtis.gowith.BuildConfig
 import com.mtis.gowith.R
 import com.mtis.gowith.base.BaseActivity
 import com.mtis.gowith.databinding.ActivityMainBinding
-import com.mtis.gowith.jsbridge.BridgeWebView
-import com.mtis.gowith.jsbridge.OnBridgeCallback
+import com.mtis.gowith.domain.model.ImageFile
 import com.mtis.gowith.viewmodel.MainViewModel
-import com.mtis.gowith.widget.utils.Utils.BASE_URL
+import com.mtis.gowith.widget.utils.P
+import com.mtis.gowith.widget.utils.webview.MainJavascriptInterface
+import com.mtis.gowith.widget.utils.webview.jsbridge.OnBridgeCallback
 import dagger.hilt.android.AndroidEntryPoint
 import org.xml.sax.helpers.DefaultHandler
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
+    private val TAG: String = "MainActivity"
     private val mainViewModel by viewModels<MainViewModel>()
+
+    private lateinit var mJSInterface: MainJavascriptInterface
+
+    override fun onResume() {
+        super.onResume()
+
+        mainViewModel.startRealTimeLocationCheck()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        mainViewModel.stopRealTimeLocationCheck()
+    }
 
     override fun init() {
         binding.mainWebView.isHorizontalScrollBarEnabled = false
@@ -42,12 +53,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.mainWebView.webViewClient = webViewClient
         binding.mainWebView.webChromeClient = chromeClient
 
-        binding.mainWebView.addJavascriptInterface(MainJavascriptInterface(binding.mainWebView.callbacks,binding.mainWebView), "WebViewJavascriptBridge")
+        if (Build.VERSION.SDK_INT >= 19) {
+            binding.mainWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        } else {
+            binding.mainWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        }
+
+        mJSInterface =
+            MainJavascriptInterface(binding.mainWebView.callbacks, binding.mainWebView, jsInterfaceListener, this)
+        binding.mainWebView.addJavascriptInterface(mJSInterface, "WebViewJavascriptBridge")
         binding.mainWebView.setGson(Gson())
 
-        binding.mainWebView.loadUrl(BASE_URL)
+        binding.mainWebView.loadUrl("file:///android_asset/demo.html")
+        val serverUrl: String = P.getServerUrl(this)
+        if (serverUrl == null || serverUrl == "" || !serverUrl.startsWith("http")) shortShowToast("서버 주소가 적합하게 설정되더 있지 않습니다. 현재 서버 주소: $serverUrl")
+        else binding.mainWebView.loadUrl(
+            serverUrl
+        )
 
+        setObserver()
+    }
 
+    fun setObserver() {
+        lifecycleScope.launchWhenCreated {
+            mainViewModel.realTimeLocation.collect { loc ->
+                Log.e(TAG, "loc : lat -> ${loc?.latitude} lng -> ${loc?.longitude} ")
+                binding.tvMainDebug.setText("loc : lat -> ${loc?.latitude} lng -> ${loc?.longitude} ")
+                mJSInterface.recivedLocation(loc)
+            }
+        }
     }
 
     private val webViewClient = object : WebViewClient() {
@@ -62,146 +96,85 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val chromeClient = object : WebChromeClient() {
 
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+            consoleMessage?.let {
+                Log.e(TAG, consoleMessage.message())
+            }
+            return true
+        }
     }
 
     private val handler: DefaultHandler = DefaultHandler()
-}
 
-class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
-    private val TAG: String = "MainInterface"
 
-    private var mWebView: BridgeWebView? = null
+    /**
+     * Javascript Interface Listener 구현
+     * 기능 중 Activity와 연결 되어야 하는 기능을 구현하기 위해 Listener 구현
+     */
 
-    constructor(callbacks: Map<String?, OnBridgeCallback?>?, webView: BridgeWebView?) : super(
-        callbacks
-    ) {
-        mWebView = webView
+    private val jsInterfaceListener:MainJavascriptInterface.MainJavaScriptInterfaceListener = object : MainJavascriptInterface.MainJavaScriptInterfaceListener {
+        override fun singlePickPhoto() {
+            pickMedia?.launch(
+                PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    .build()
+            )
+        }
+
+        override fun multiPickPhoto() {
+            pickMultipleMedia?.launch(
+                PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    .build()
+            )
+        }
+
     }
 
-    constructor(callbacks: Map<String?, OnBridgeCallback?>?) : super(callbacks) {}
-
-    // receive case 1
-    override fun defaultRespons(data: String): String {
-        Log.e(TAG, "[defaultRespons] $data")
-        return "it is default response (callback message)"
+    var pickMedia = registerForActivityResult<PickVisualMediaRequest, Uri>(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        // Callback is invoked after the user selects a media item or closes the photo picker.
+        val imf = ImageFile()
+        if (uri != null) {
+            val f: ImageFile._File = ImageFile._File()
+            f.uri = uri.toString()
+            f.path = uri.path.toString()
+            imf.files.add(f)
+        }
+        val re = Gson().toJson(imf)
+        Log.e(TAG, "[responseImageFileInJs] $re")
+        binding.mainWebView.callHandler("responseImageFileInJs", re, object : OnBridgeCallback {
+            override fun onCallBack(data: String) {
+                Log.e(TAG, "[responseImageFileInJs] $data")
+            }
+        })
     }
 
-    // receive case 2
-    @JavascriptInterface
-    fun submitFromWeb(data: String, callbackId: String) {
-        Log.e(
-            TAG, "[submitFromWeb] " + data + ", callbackId= " + callbackId +
-                    ", thread name= " + Thread.currentThread().name
-        )
-        mWebView?.sendResponse("submitFromWeb response", callbackId)
-    }
 
-    // Request contacts
-    @JavascriptInterface
-    fun requestContactsFromWeb(data: String, callbackId: String) {
 
-        Log.e(
-            TAG, "[requestContactsFromWeb] " + data + ", callbackId= " +
-                    callbackId + ", thread= " + Thread.currentThread().name
-        )
-        //  To do
-//        mWebView.sendResponse(resultJson("ok"), callbackId)
-//        LoaderManager.getInstance(this@MainActivity).initLoader<Cursor>(0, null, mContactsLoader)
-    }
+    private val MAX_NUM_PHOTOS = 10
 
-    // Get photo file path/uri
-    @JavascriptInterface
-    fun requestImageFileFromWeb(data: String, callbackId: String) {
-        Log.e(
-            TAG, "[requestImageFileFromWeb] " + data + ", callbackId= " +
-                    callbackId + ", thread= " + Thread.currentThread().name
-        )
-//        mWebView.sendResponse(resultJson("ok"), callbackId)
-//        pickPhoto(true) To do
-    }
-
-    // Request version info
-    @JavascriptInterface
-    fun requestVersionInfoFromWeb(data: String, callbackId: String) {
-        Log.e(
-            TAG, "[requestVersionInfoFromWeb] " + data + ", callbackId= " +
-                    callbackId + ", thread= " + Thread.currentThread().name
-        )
-
-        // To do
-//        val vi = VersionInfo()
-//        vi.osType = "Android"
-//        vi.appVersionCode = BuildConfig.VERSION_CODE + ""
-//        vi.appVersionName = BuildConfig.VERSION_NAME + ""
-//        vi.splashID = "1234567890"
-//        val ft: String = ""//P.getFcmToken(this@MainActivity)
-//        if (ft == null) vi.fcmToken = "" else vi.fcmToken = ft
-//        val re = Gson().toJson(vi)
-//
-//        mWebView?.sendResponse(re, callbackId)
-    }
-
-    // Get Tmap launch
-    @JavascriptInterface
-    fun requestTmapLaunchFromWeb(data: String, callbackId: String) {
-        Log.e(
-            TAG, "[requestTmapLaunchFromWeb] " + data + ", callbackId= " +
-                    callbackId + ", thread= " + Thread.currentThread().name
-        )
-
-        // To do
-//        try {
-//            val g = Gson()
-//            val cd: TmapLaunch = g.fromJson(data, TmapLaunch::class.java)
-//            if (cd.goalLat == null || cd.goalLat.isEmpty() || cd.goalLong == null || cd.goalLong.isEmpty()) {
-//                addLog(false, "goalLat is empty OR goalLong is empty")
-//                mWebView.sendResponse(resultJson("fail"), callbackId)
-//                return
-//            }
-//            if (cd.startLat != null && cd.startLong != null) {
-//                val uri = "tmap://route?startx=" + cd.startLong.toString() +
-//                        "&starty=" + cd.startLat.toString() +
-//                        "&goalx=" + cd.goalLong.toString() +
-//                        "&goaly" + cd.goalLat
-//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
-//                mWebView.sendResponse(resultJson("ok"), callbackId)
-//            } else {
-//                val uri = "tmap://route?goalx=" + cd.goalLong.toString() + "&goaly" + cd.goalLat
-//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
-//                mWebView.sendResponse(resultJson("ok"), callbackId)
-//            }
-//        } catch (ae: ActivityNotFoundException) {
-//            addLog(false, "ActivityNotFoundException: " + ae.message.toString())
-//            mWebView.sendResponse(resultJson("fail"), callbackId)
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.data = Uri.parse("https://play.google.com/store/apps/details?id=com.skt.tmap.ku")
-//            intent.setPackage("com.android.vending")
-//            startActivity(intent)
-//        } catch (je: JsonSyntaxException) {
-//            addLog(false, "JSON parsing error: " + je.message.toString())
-//            mWebView.sendResponse(resultJson("fail"), callbackId)
-//        }
-    }
-
-    // NFC On/Off
-    @JavascriptInterface
-    fun requestNfcLaunchFromWeb(data: String, callbackId: String) {
-        // To do
-//        Log.e(TAG, "[requestNfcLaunchFromWeb] " + data + ", callbackId= " +
-//                    callbackId + ", thread= " + Thread.currentThread().name
-//        )
-//        try {
-//            val intent = Intent(Settings.ACTION_NFC_SETTINGS)
-//            // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent)
-//            mWebView.sendResponse(resultJson("ok"), callbackId)
-//        } catch (ae: ActivityNotFoundException) {
-//            addLog(false, "ActivityNotFoundException: " + ae.message.toString())
-//            mWebView.sendResponse(resultJson("fail"), callbackId)
-//        }
+    var pickMultipleMedia = registerForActivityResult<PickVisualMediaRequest, List<Uri>>(
+        ActivityResultContracts.PickMultipleVisualMedia(MAX_NUM_PHOTOS)
+    ) { uris: List<Uri> ->
+        // Callback is invoked after the user selects media items or closes the photo picker.
+        val imf = ImageFile()
+        if (!uris.isEmpty()) {
+            for (i in uris.indices) {
+                val f: ImageFile._File = ImageFile._File()
+                f.uri = uris[i].toString()
+                f.path = uris[i].path.toString()
+                imf.files.add(f)
+            }
+        }
+        val re = Gson().toJson(imf)
+        Log.e(TAG, "[responseImageFileInJs] $re")
+        binding.mainWebView.callHandler("responseImageFileInJs", re, object : OnBridgeCallback {
+            override fun onCallBack(data: String) {
+                Log.e(TAG, "[responseImageFileInJs] $data")
+            }
+        })
     }
 }
+

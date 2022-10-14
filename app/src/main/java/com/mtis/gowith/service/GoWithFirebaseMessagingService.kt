@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
@@ -18,6 +17,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mtis.gowith.R
 import com.mtis.gowith.view.activity.MainActivity
+import com.mtis.gowith.widget.utils.P
 
 
 class GoWithFirebaseMessagingService : FirebaseMessagingService() {
@@ -57,6 +57,7 @@ class GoWithFirebaseMessagingService : FirebaseMessagingService() {
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
         sendRegistrationToServer(token)
+        P.setFcmToken(applicationContext, token)
     }
     // [END on_new_token]
 

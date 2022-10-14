@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         tools:context=".view.activity.MainActivity">
 
-        <com.mtis.gowith.jsbridge.BridgeWebView
+        <com.mtis.gowith.widget.utils.webview.jsbridge.BridgeWebView
             android:id="@+id/main_web_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -23,6 +23,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_main_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/noto_sans_kr_bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,8 +3,8 @@ package com.mtis.gowith.di
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
@@ -22,6 +22,8 @@ class App : Application() {
         }
     }
 
+    private var mRequestQueue: RequestQueue? = null
+
     override fun onCreate() {
         super.onCreate()
         application = this
@@ -38,6 +40,11 @@ class App : Application() {
         Firebase.messaging.subscribeToTopic("weather").addOnCompleteListener { task ->
 
         }
+    }
+
+    fun getRequestQueue(): RequestQueue? {
+        if (mRequestQueue == null) mRequestQueue = Volley.newRequestQueue(applicationContext)
+        return mRequestQueue
     }
 
 }

@@ -91,6 +91,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 title = getString(R.string.str_permission_request_title_bluetooth)
                 message = getString(R.string.str_permission_request_message_bluetooth)
             }
+            android.Manifest.permission.BLUETOOTH_ADMIN -> {
+                title = getString(R.string.str_permission_request_title_bluetooth)
+                title = getString(R.string.str_permission_request_message_bluetooth)
+            }
             android.Manifest.permission.READ_CONTACTS -> {
                 title = getString(R.string.str_permission_request_title_contact)
                 message = getString(R.string.str_permission_request_message_contact)

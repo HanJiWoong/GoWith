@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.webkit.WebSettings;
 
 public class P {
-	private static final String PREFERENCE_NAME = "kr.mtis.platform.bus.preferences";
+	private static final String PREFERENCE_NAME = "com.mtis.gowith";
 
 	/*
 	 *

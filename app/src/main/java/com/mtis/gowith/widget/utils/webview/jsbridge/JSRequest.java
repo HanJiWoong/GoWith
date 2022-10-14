@@ -1,4 +1,4 @@
-package com.mtis.gowith.jsbridge;
+package com.mtis.gowith.widget.utils.webview.jsbridge;
 
 /**
  * Created on 2019/7/10.

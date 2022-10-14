@@ -1,6 +1,6 @@
 package com.mtis.gowith.di
 
-import com.mtis.gowith.widget.utils.Utils.API_URL
+import com.mtis.gowith.common.Constants.API_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

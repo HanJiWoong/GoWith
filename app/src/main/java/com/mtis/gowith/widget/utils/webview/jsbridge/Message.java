@@ -1,4 +1,4 @@
-package com.mtis.gowith.jsbridge;
+package com.mtis.gowith.widget.utils.webview.jsbridge;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

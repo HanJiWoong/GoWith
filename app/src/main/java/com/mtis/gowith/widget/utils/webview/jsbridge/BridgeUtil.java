@@ -1,4 +1,4 @@
-package com.mtis.gowith.jsbridge;
+package com.mtis.gowith.widget.utils.webview.jsbridge;
 
 import android.content.Context;
 import android.webkit.WebView;
