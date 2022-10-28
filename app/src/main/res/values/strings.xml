@@ -22,4 +22,7 @@
     <string name="str_permission_request_title_notification">알림 권한이 필요합니다.</string>
     <string name="str_permission_request_message_notification">승하차 알림을 위한 알림 권한이 필요합니다.</string>
 
+    // aid_list.xml (NFC HCE) 에서 사용
+    <string name="service_name">DongHaeng_Service</string>
+    <string name="card_title">DongHaeng_Tag</string>
 </resources>

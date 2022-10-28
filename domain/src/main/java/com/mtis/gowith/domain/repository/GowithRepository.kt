@@ -1,7 +1,7 @@
 package com.mtis.gowith.domain.repository
 
-import com.mtis.gowith.domain.model.VersionInfo
+import com.mtis.gowith.domain.model.webinterface.call.VersionInfoInterface
 
 interface GowithRepository {
-    fun getVersionInfo(versionInfo: VersionInfo)
+    fun getVersionInfo(versionInfoInterface: VersionInfoInterface)
 }

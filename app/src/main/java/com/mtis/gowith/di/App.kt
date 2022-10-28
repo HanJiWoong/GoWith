@@ -3,11 +3,10 @@ package com.mtis.gowith.di
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
+import com.mtis.gowith.widget.utils.Utils
 import dagger.hilt.android.HiltAndroidApp
 
 // 컴파일 타임 시 표준 컴포넌트 빌딩에 필요한 클래스 초기화
@@ -22,12 +21,11 @@ class App : Application() {
         }
     }
 
-    private var mRequestQueue: RequestQueue? = null
-
     override fun onCreate() {
         super.onCreate()
         application = this
 
+//        Utils.clearApplicationData(this)
         initFirebase()
     }
 
@@ -37,14 +35,23 @@ class App : Application() {
                 Log.e("Application","token : ${task.result}")
             }
         }
-        Firebase.messaging.subscribeToTopic("weather").addOnCompleteListener { task ->
 
-        }
+        /*
+         * Jiny
+         * 주석 처리된 것이 기존 코드이며, "everyone" 토픽을 갖도록 코드 보완했습니다.
+         */
+//        Firebase.messaging.subscribeToTopic("weather").addOnCompleteListener { task ->
+//        }
+        Firebase.messaging.subscribeToTopic("everyone")
+            .addOnCompleteListener { task ->
+                var msg = "Subscribed"
+                if (!task.isSuccessful) {
+                    msg = "Subscribe failed"
+                }
+                Log.d("subscribeToTopic", msg)
+            }
     }
 
-    fun getRequestQueue(): RequestQueue? {
-        if (mRequestQueue == null) mRequestQueue = Volley.newRequestQueue(applicationContext)
-        return mRequestQueue
-    }
+
 
 }

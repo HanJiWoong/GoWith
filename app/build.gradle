@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.mtis.gowith"
         minSdk 24
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -106,5 +106,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.8'
 
-    implementation 'com.android.volley:volley:1.2.1'
 }

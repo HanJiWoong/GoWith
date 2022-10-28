@@ -76,6 +76,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge, B
         webSettings.setSupportZoom(false);
         webSettings.setBuiltInZoomControls(false);
 
+        P.setClearCache(contex, true);
         webSettings.setCacheMode(P.getCacheMode(contex));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
@@ -158,7 +159,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge, B
      * @param data             data
      * @param responseCallback OnBridgeCallback
      */
-    private void doSend(String handlerName, Object data, OnBridgeCallback responseCallback) {
+    private void doSend(String handlerName, String data, OnBridgeCallback responseCallback) {
         if (!(data instanceof String) && mGson == null){
             return;
         }

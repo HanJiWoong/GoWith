@@ -1,7 +1,9 @@
 package com.mtis.gowith.viewmodel
 
+import android.content.Context
 import android.location.Location
 import android.net.Uri
+import android.nfc.NfcAdapter
 import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +15,8 @@ import com.mtis.gowith.base.BaseViewModel
 import com.mtis.gowith.common.LocationService
 import com.mtis.gowith.domain.interactors.UpdateRealTimeLocation
 import com.mtis.gowith.domain.model.ImageFile
+import com.mtis.gowith.domain.model.webinterface.call.CommonInterface
+import com.mtis.gowith.domain.model.webinterface.call.StateInterface
 import com.mtis.gowith.domain.observers.ObserveRealTimeLocation
 import com.mtis.gowith.widget.utils.webview.jsbridge.OnBridgeCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +30,7 @@ class MainViewModel @Inject constructor(
     private val updateRealTimeLocation: UpdateRealTimeLocation,
     private val observeRealTimeLocation: ObserveRealTimeLocation
 ) : BaseViewModel() {
+
 
     val realTimeLocation: StateFlow<Location?> = observeRealTimeLocation(Unit)
         .stateIn(
@@ -50,4 +55,9 @@ class MainViewModel @Inject constructor(
     }
 
 
+    fun checkNFCState(context: Context):Boolean {
+        val nfcAdapter: NfcAdapter = NfcAdapter.getDefaultAdapter(context)
+
+        return nfcAdapter.isEnabled
+    }
 }

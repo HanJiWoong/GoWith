@@ -1,6 +1,6 @@
-package com.mtis.gowith.domain.model
+package com.mtis.gowith.domain.model.webinterface.call
 
-data class VersionInfo(
+data class VersionInfoInterface(
     val osType:String,
     val appVersionCode:String,
     val appVersionName:String,

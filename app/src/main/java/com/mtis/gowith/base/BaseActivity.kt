@@ -32,3 +32,4 @@ abstract class BaseActivity<T : ViewDataBinding>(@LayoutRes private val layoutRe
 
     protected fun longShowToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
+

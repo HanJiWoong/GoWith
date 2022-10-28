@@ -67,6 +67,14 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 title = getString(R.string.str_permission_request_title_album)
                 message = getString(R.string.str_permission_request_message_album)
             }
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
+                title = getString(R.string.str_permission_request_title_album)
+                message = getString(R.string.str_permission_request_message_album)
+            }
+            android.Manifest.permission.CAMERA -> {
+                title = getString(R.string.str_permission_request_title_album)
+                message = getString(R.string.str_permission_request_message_album)
+            }
             android.Manifest.permission.ACCESS_COARSE_LOCATION -> {
                 title = getString(R.string.str_permission_request_title_location)
                 message = getString(R.string.str_permission_request_message_location)
@@ -93,7 +101,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             }
             android.Manifest.permission.BLUETOOTH_ADMIN -> {
                 title = getString(R.string.str_permission_request_title_bluetooth)
-                title = getString(R.string.str_permission_request_message_bluetooth)
+                message = getString(R.string.str_permission_request_message_bluetooth)
             }
             android.Manifest.permission.READ_CONTACTS -> {
                 title = getString(R.string.str_permission_request_title_contact)
