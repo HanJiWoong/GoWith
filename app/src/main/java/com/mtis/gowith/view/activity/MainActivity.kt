@@ -51,16 +51,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
 
 
-        val hle: Handler = Handler(Looper.getMainLooper())
-        hle.post({
-            val javascriptCommand = "javascript:currentNfcState()"
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                binding.mainWebView.evaluateJavascript(javascriptCommand, null)
-            } else {
-                binding.mainWebView.loadUrl(javascriptCommand)
-            }
-        })
+        val nfcAdapter:NfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if(nfcAdapter.isEnabled) {
+            mJSInterface.sendCurrentNfcState("true")
+        } else {
+            mJSInterface.sendCurrentNfcState("false")
+        }
 
     }
 
@@ -131,7 +127,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                         Log.e(TAG, "비활성화")
 
 
-                        mJSInterface.callLog("일단이거로그로뜨면됨")
+                        mJSInterface.sendCurrentNfcState("false")
                     }
                     NfcAdapter.STATE_TURNING_OFF -> {
                         Log.e(TAG, "비활성화 전환")
@@ -139,7 +135,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     NfcAdapter.STATE_ON -> {
                         Log.e(TAG, "활성화")
 
-                        mJSInterface.callLog("일단이거로그로뜨면됨")
+                        mJSInterface.sendCurrentNfcState("true")
                     }
                     NfcAdapter.STATE_TURNING_ON -> {
                         Log.e(TAG, "활성화 전환")
@@ -148,7 +144,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                         if (state == 5) {
                             Log.e(TAG, "카드모드 활성화")
 
-                            mJSInterface.callLog("일단이거로그로뜨면됨")
+                            mJSInterface.sendCurrentNfcState("true")
                         }
                     }
                 }
@@ -209,7 +205,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             serverUrl
         )
 
-        mJSInterface.callLog("일단이거로그로뜨면됨")
 
         setObserver()
     }

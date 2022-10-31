@@ -262,6 +262,16 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         mContext?.startActivity(intent)
     }
 
+    fun sendCurrentNfcState(state:String) {
+        val javascriptCommand = "javascript:webView.currentNfcState(\"${state}\")"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mWebView?.evaluateJavascript(javascriptCommand, null)
+        } else {
+            mWebView?.loadUrl(javascriptCommand)
+        }
+    }
+
 
     // BlueTooth On/Off 상태 전달
     @JavascriptInterface
@@ -493,18 +503,6 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         } else {
             mListener.multiPickPhoto()
         }
-    }
-
-    @JavascriptInterface
-    fun callLog(message: String) {
-        val javascriptCommand = "javascript:webView.currentNfcState()"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mWebView?.evaluateJavascript(javascriptCommand, null)
-        } else {
-            mWebView?.loadUrl(javascriptCommand)
-        }
-
     }
 
 }
