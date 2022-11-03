@@ -15,14 +15,17 @@ import android.webkit.JavascriptInterface
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.mtis.gowith.BuildConfig
+import com.mtis.gowith.R
 import com.mtis.gowith.common.BleBeaconService
 import com.mtis.gowith.common.GsonConverter
 import com.mtis.gowith.domain.model.TMapLaunch
+import com.mtis.gowith.domain.model.webinterface.NotiInterface
 import com.mtis.gowith.domain.model.webinterface.call.VersionInfoInterface
 import com.mtis.gowith.domain.model.webinterface.call.CommonInterface
 import com.mtis.gowith.domain.model.webinterface.response.CommonResponseInterface
 import com.mtis.gowith.domain.model.webinterface.call.LocationInterface
 import com.mtis.gowith.domain.model.webinterface.call.StateInterface
+import com.mtis.gowith.domain.model.webinterface.response.CallPhoneResponseInterface
 import com.mtis.gowith.domain.model.webinterface.response.TMapResponseInterface
 import com.mtis.gowith.widget.utils.P
 import com.mtis.gowith.widget.utils.webview.jsbridge.BridgeWebView
@@ -110,6 +113,21 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
 //        mWebView?.sendResponse(GsonConverter.resultJson("ok"), callbackId)
 //        pickPhoto(true)
 //    }
+
+    @JavascriptInterface
+    fun requestFCMToken(data: String, callbackId: String) {
+        Log.e(
+            TAG, "[requestFCMToken] " + data + ", callbackId= " +
+                    callbackId + ", thread= " + Thread.currentThread().name
+        )
+
+        var ft: String? = P.getFcmToken(mContext)
+        if (ft == null) ft = ""
+
+        val obj = CommonInterface(true, ft)
+        val re = Gson().toJson(obj)
+        mWebView?.sendResponse(re, callbackId)
+    }
 
     // Request version info
     @JavascriptInterface
@@ -262,8 +280,8 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         mContext?.startActivity(intent)
     }
 
-    fun sendCurrentNfcState(state:String) {
-        val javascriptCommand = "javascript:webView.currentNfcState(\"${state}\")"
+    fun sendCurrentNfcState(state: String) {
+        val javascriptCommand = "javascript:window.NativeInterface.currentNfcState(\"${state}\")"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mWebView?.evaluateJavascript(javascriptCommand, null)
@@ -503,6 +521,109 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         } else {
             mListener.multiPickPhoto()
         }
+    }
+
+    /**
+     * Noti 처리
+     */
+    fun sendNotiData(data: HashMap<String, String?>) {
+        try {
+            mContext?.let { context ->
+                val interfaceName: String? =
+                    data.get(context.getString(R.string.noti_param_interface_name))
+                val alarmType = data.get(context.getString(R.string.noti_param_alarm_type))
+                val location = data.get(context.getString(R.string.noti_param_location))
+                val memberId = data.get(context.getString(R.string.noti_param_member_id))
+                val memberName = data.get(context.getString(R.string.noti_param_member_name))
+                val sharedManagerId = data.get(context.getString(R.string.noti_param_shared_maneger_id))
+                val sharedManagerName = data.get(context.getString(R.string.noti_param_shared_manager_name))
+
+                if(alarmType == null || location == null) {
+                    throw Exception("알람 타입 또는 로케이션이 들어오지 않았습니다.")
+                }
+
+                var notiInterface: NotiInterface = NotiInterface(
+                    alaramType = alarmType,
+                    location = location
+                )
+
+                when (interfaceName) {
+                    context.getString(R.string.web_interface_noti_get_not_riding_pu) -> {
+                        if(memberId == null || memberName == null || sharedManagerId == null || sharedManagerName == null) {
+                            throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
+                        }
+
+                        notiInterface.memberId = memberId
+                        notiInterface.memberName = memberName
+                        notiInterface.sharedManagerId = sharedManagerId
+                        notiInterface.sharedManagerName = sharedManagerName
+
+                        val convert = Gson().toJson(notiInterface)
+
+                        Log.e(TAG, "json Convert result : ${convert}")
+
+                        commonJSCall(funcName = interfaceName, jsonParam = convert)
+                    }
+                    context.getString(R.string.web_interface_noti_get_not_getting_off_pu) -> {
+                        if(memberId == null || memberName == null || sharedManagerId == null || sharedManagerName == null) {
+                            throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
+                        }
+
+                        notiInterface.memberId = memberId
+                        notiInterface.memberName = memberName
+                        notiInterface.sharedManagerId = sharedManagerId
+                        notiInterface.sharedManagerName = sharedManagerName
+
+                        val convert = Gson().toJson(notiInterface)
+                        Log.e(TAG, "json Convert result : ${convert}")
+
+                        commonJSCall(funcName = interfaceName, jsonParam = convert)
+                    }
+                    context.getString(R.string.web_interface_noti_get_not_riding_mg_dv) -> {
+                        val convert = Gson().toJson(notiInterface)
+                        Log.e(TAG, "json Convert result : ${convert}")
+
+                        commonJSCall(funcName = interfaceName, jsonParam = convert)
+                    }
+                    context.getString(R.string.web_interface_noti_get_not_getting_off_mg_dv) -> {
+                        val convert = Gson().toJson(notiInterface)
+                        Log.e(TAG, "json Convert result : ${convert}")
+
+                        commonJSCall(funcName = interfaceName, jsonParam = convert)
+                    }
+                    else -> {
+                        throw Exception("인터페이스 명이 들어오지 않았습니다.")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun commonJSCall(funcName:String, jsonParam:String) {
+        val javascriptCommand = "javascript:window.PushAlarm.${funcName}(\'${jsonParam}\')"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mWebView?.evaluateJavascript(javascriptCommand, null)
+        } else {
+            mWebView?.loadUrl(javascriptCommand)
+        }
+    }
+
+    @JavascriptInterface
+    fun requestPhoneCall(data: String,callbackId: String) {
+        Log.e(
+            TAG, "[RequestPhoneCall] " + data + ", callbackId= " +
+                    callbackId + ", thread= " + Thread.currentThread().name
+        )
+
+        val convert = Gson().fromJson(data,CallPhoneResponseInterface::class.java)
+
+        val myUri = Uri.parse("tel:${convert.phone}")
+        val myIntent = Intent(Intent.ACTION_CALL, myUri)
+        mContext?.startActivity(myIntent)
     }
 
 }

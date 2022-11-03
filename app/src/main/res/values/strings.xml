@@ -21,8 +21,31 @@
     <string name="str_permission_request_message_contact">주변 동료에게 공유하기 위해 연락처 권한이 필요합니다.</string>
     <string name="str_permission_request_title_notification">알림 권한이 필요합니다.</string>
     <string name="str_permission_request_message_notification">승하차 알림을 위한 알림 권한이 필요합니다.</string>
+    <string name="str_permission_request_title_call_phone">전화 걸기 권한</string>
+    <string name="str_permission_request_message_call_phone">전화 걸기 권한이 필요합니다.</string>
 
     // aid_list.xml (NFC HCE) 에서 사용
     <string name="service_name">DongHaeng_Service</string>
     <string name="card_title">DongHaeng_Tag</string>
+
+    // intent filter action
+    <string name="str_intent_filer_action_noti">ActionNoti</string>
+
+    // intent extra
+    <string name="str_intent_extra_noti_data">NotiData</string>
+
+    // web interface
+    <string name="web_interface_noti_get_not_riding_pu">getNotRidingPu</string>
+    <string name="web_interface_noti_get_not_getting_off_pu">getNotGettingOffPu</string>
+    <string name="web_interface_noti_get_not_riding_mg_dv">getNotRidingMgDv</string>
+    <string name="web_interface_noti_get_not_getting_off_mg_dv">getNotGettingOffMgDv</string>
+
+    // noti parameter
+    <string name="noti_param_interface_name">interface_name</string>
+    <string name="noti_param_alarm_type">alarm_type</string>
+    <string name="noti_param_location">location</string>
+    <string name="noti_param_member_id">member_id</string>
+    <string name="noti_param_member_name">member_name</string>
+    <string name="noti_param_shared_maneger_id">shared_manager_id</string>
+    <string name="noti_param_shared_manager_name">shared_manager_name</string>
 </resources>

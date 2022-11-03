@@ -1,6 +1,9 @@
 package com.mtis.gowith.viewmodel
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.location.Location
 import android.net.Uri
 import android.nfc.NfcAdapter
@@ -30,6 +33,7 @@ class MainViewModel @Inject constructor(
     private val updateRealTimeLocation: UpdateRealTimeLocation,
     private val observeRealTimeLocation: ObserveRealTimeLocation
 ) : BaseViewModel() {
+
 
 
     val realTimeLocation: StateFlow<Location?> = observeRealTimeLocation(Unit)

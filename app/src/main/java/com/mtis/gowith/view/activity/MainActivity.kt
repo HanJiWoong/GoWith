@@ -8,10 +8,7 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.net.Uri
 import android.nfc.NfcAdapter
-import android.os.Build
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -35,6 +32,7 @@ import org.xml.sax.helpers.DefaultHandler
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -50,14 +48,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel.startRealTimeLocationCheck()
 
 
-
-        val nfcAdapter:NfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        if(nfcAdapter.isEnabled) {
+        val nfcAdapter: NfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (nfcAdapter.isEnabled) {
             mJSInterface.sendCurrentNfcState("true")
         } else {
             mJSInterface.sendCurrentNfcState("false")
         }
-
     }
 
     /*
@@ -104,6 +100,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         startService(mHceService)
 
         registerReceiver(nfcReceiver, IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED))
+        registerReceiver(
+            pushNotiReciver,
+            IntentFilter(getString(R.string.str_intent_filer_action_noti))
+        )
+
+        val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
+            getString(R.string.str_intent_extra_noti_data)
+        ) as HashMap<String, String?>?
+
+
+        noti_data?.let {
+            collectNotiData(it)
+        }
     }
 
     override fun onStop() {
@@ -114,6 +123,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel.stopRealTimeLocationCheck()
 
         unregisterReceiver(nfcReceiver)
+        unregisterReceiver(pushNotiReciver)
+    }
+
+    // foreground push noti data reciver
+    private val pushNotiReciver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
+                    getString(R.string.str_intent_extra_noti_data)
+                ) as HashMap<String, String?>?
+
+
+                noti_data?.let {
+                    collectNotiData(it)
+                }
+            }
+        }
+    }
+
+    fun collectNotiData(notiData: HashMap<String, String?>) {
+        mJSInterface.sendNotiData(notiData)
     }
 
     val nfcReceiver = object : BroadcastReceiver() {
@@ -207,6 +237,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
 
         setObserver()
+
+
     }
 
     fun setObserver() {

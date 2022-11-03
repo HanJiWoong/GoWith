@@ -1,8 +1,10 @@
 package com.mtis.gowith.widget.utils
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import java.io.File
+
 
 object Utils {
     /**
@@ -37,5 +39,16 @@ object Utils {
             }
         }
         return dir?.delete() ?: false
+    }
+
+    fun bundleToMap(extras: Bundle): Map<String, String?>? {
+        val map: MutableMap<String, String?> = HashMap()
+        val ks = extras.keySet()
+        val iterator: Iterator<String> = ks.iterator()
+        while (iterator.hasNext()) {
+            val key = iterator.next()
+            map[key] = extras.getString(key)
+        }
+        return map
     }
 }

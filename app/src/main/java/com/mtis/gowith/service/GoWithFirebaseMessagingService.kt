@@ -25,11 +25,15 @@ class GoWithFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
 
-        sendNotification(remoteMessage)
+//        sendNotification(remoteMessage)
 
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+
+            val intent = Intent(getString(R.string.str_intent_filer_action_noti))
+            intent.putExtra(getString(R.string.str_intent_extra_noti_data),HashMap(remoteMessage.data))
+            sendBroadcast(intent)
 
             if (true) {
                 scheduleJob()
@@ -43,6 +47,8 @@ class GoWithFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
     }
+
+
 
     // [START on_new_token]
     /**
