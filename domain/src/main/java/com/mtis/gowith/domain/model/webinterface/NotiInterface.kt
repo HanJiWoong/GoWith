@@ -7,12 +7,16 @@ data class NotiInterface(
     val alaramType:String,
     @SerializedName("location")
     val location:String,
-    @SerializedName("member_id")
-    var memberId:String? = null,
+//    @SerializedName("member_id")
+//    var memberId:String? = null,
     @SerializedName("member_name")
     var memberName:String? = null,
-    @SerializedName("shared_maneger_id")
-    var sharedManagerId:String? = null,
-    @SerializedName("shared_maneger_name")
-    var sharedManagerName:String? = null
+    @SerializedName("ride_manager_phone")
+    var rideManagerPhone:String? = null,
+    @SerializedName("line_result_id")
+    var lineResultId:String? = null
+//    @SerializedName("shared_maneger_id")
+//    var sharedManagerId:String? = null,
+//    @SerializedName("shared_maneger_name")
+//    var sharedManagerName:String? = null
 )

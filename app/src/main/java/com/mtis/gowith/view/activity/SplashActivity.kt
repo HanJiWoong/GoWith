@@ -4,18 +4,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.firebase.FirebaseApp
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mtis.gowith.R
 import com.mtis.gowith.base.BaseActivity
 import com.mtis.gowith.databinding.ActivitySplashBinding
 import com.mtis.gowith.viewmodel.SplashViewModel
 import com.mtis.gowith.widget.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {

@@ -27,6 +27,7 @@ class App : Application() {
 
 //        Utils.clearApplicationData(this)
         initFirebase()
+
     }
 
     private fun initFirebase() {

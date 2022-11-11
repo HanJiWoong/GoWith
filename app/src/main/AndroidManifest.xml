@@ -20,8 +20,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
-    <uses-feature android:name="android.hardware.nfc.hce" android:required="true"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.nfc.hce"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <application
         android:name=".di.App"
@@ -33,12 +37,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoWith"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".ResultActivity"
+            android:exported="false"
+            android:parentActivityName=".view.activity.SplashActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -56,56 +68,49 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- Start Firebase service -->
+        </activity> <!-- Start Firebase service -->
         <service
-            android:name="com.mtis.gowith.service.GoWithFirebaseMessagingService"
-            android:exported="false">
+            android:name=".service.GoWithFirebaseMessagingService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <!-- HFC Host Card Emulator service -->
-        <service android:name=".common.NfcHceService"
+        </service> <!-- HFC Host Card Emulator service -->
+        <service
+            android:name=".common.NfcHceService"
             android:exported="true"
             android:permission="android.permission.BIND_NFC_SERVICE">
             <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/aid_list"/>
-        </service>
 
-        <!-- BLE Beacon service -->
-        <service android:name=".common.BleBeaconService" />
-
-        <!-- Default icon 설정 -->
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/aid_list" />
+        </service> <!-- BLE Beacon service -->
+        <service android:name=".common.BleBeaconService" /> <!-- Default icon 설정 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/noti_icon" />
-        <!-- Default color 설정 -->
+            android:resource="@drawable/noti_icon" /> <!-- Default color 설정 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/noti" />
-        <!-- Default Channel 설정 -->
+            android:resource="@color/noti" /> <!-- Default Channel 설정 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/push_default_channel" />
-        <!-- Token 자동 초기화 방지 -->
+            android:value="@string/push_default_channel" /> <!-- Token 자동 초기화 방지 -->
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
-        <!-- End Firebase service -->
+
+        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
     </application>
 
 </manifest>

@@ -392,7 +392,6 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         )
 
         // 구현부
-
         try {
             mCurLocation?.let {
                 val obj = CommonInterface(true, LocationInterface(it.latitude, it.longitude))
@@ -408,7 +407,6 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                 Gson().toJson(obj),
                 callbackId
             )
-
         }
     }
 
@@ -533,10 +531,12 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                     data.get(context.getString(R.string.noti_param_interface_name))
                 val alarmType = data.get(context.getString(R.string.noti_param_alarm_type))
                 val location = data.get(context.getString(R.string.noti_param_location))
-                val memberId = data.get(context.getString(R.string.noti_param_member_id))
+//                val memberId = data.get(context.getString(R.string.noti_param_member_id))
                 val memberName = data.get(context.getString(R.string.noti_param_member_name))
-                val sharedManagerId = data.get(context.getString(R.string.noti_param_shared_maneger_id))
-                val sharedManagerName = data.get(context.getString(R.string.noti_param_shared_manager_name))
+//                val sharedManagerId = data.get(context.getString(R.string.noti_param_shared_maneger_id))
+//                val sharedManagerName = data.get(context.getString(R.string.noti_param_shared_manager_name))
+                val rideManagerPhone = data.get(context.getString(R.string.noti_param_ride_manager_phone))
+                val lineResultId = data.get(context.getString(R.string.noti_param_line_result_id))
 
                 if(alarmType == null || location == null) {
                     throw Exception("알람 타입 또는 로케이션이 들어오지 않았습니다.")
@@ -549,14 +549,12 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
 
                 when (interfaceName) {
                     context.getString(R.string.web_interface_noti_get_not_riding_pu) -> {
-                        if(memberId == null || memberName == null || sharedManagerId == null || sharedManagerName == null) {
+                        if(memberName == null || rideManagerPhone == null) {
                             throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
                         }
 
-                        notiInterface.memberId = memberId
                         notiInterface.memberName = memberName
-                        notiInterface.sharedManagerId = sharedManagerId
-                        notiInterface.sharedManagerName = sharedManagerName
+                        notiInterface.rideManagerPhone = rideManagerPhone
 
                         val convert = Gson().toJson(notiInterface)
 
@@ -565,14 +563,12 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                         commonJSCall(funcName = interfaceName, jsonParam = convert)
                     }
                     context.getString(R.string.web_interface_noti_get_not_getting_off_pu) -> {
-                        if(memberId == null || memberName == null || sharedManagerId == null || sharedManagerName == null) {
+                        if(memberName == null || rideManagerPhone == null) {
                             throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
                         }
 
-                        notiInterface.memberId = memberId
                         notiInterface.memberName = memberName
-                        notiInterface.sharedManagerId = sharedManagerId
-                        notiInterface.sharedManagerName = sharedManagerName
+                        notiInterface.rideManagerPhone = rideManagerPhone
 
                         val convert = Gson().toJson(notiInterface)
                         Log.e(TAG, "json Convert result : ${convert}")
@@ -580,12 +576,24 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                         commonJSCall(funcName = interfaceName, jsonParam = convert)
                     }
                     context.getString(R.string.web_interface_noti_get_not_riding_mg_dv) -> {
+                        if(lineResultId == null) {
+                            throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
+                        }
+
+                        notiInterface.lineResultId = lineResultId
+
                         val convert = Gson().toJson(notiInterface)
                         Log.e(TAG, "json Convert result : ${convert}")
 
                         commonJSCall(funcName = interfaceName, jsonParam = convert)
                     }
                     context.getString(R.string.web_interface_noti_get_not_getting_off_mg_dv) -> {
+                        if(lineResultId == null) {
+                            throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
+                        }
+
+                        notiInterface.lineResultId = lineResultId
+
                         val convert = Gson().toJson(notiInterface)
                         Log.e(TAG, "json Convert result : ${convert}")
 

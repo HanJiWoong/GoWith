@@ -2,6 +2,7 @@
     <string name="app_name">동행</string>
     <string name="str_back_press_warning_toast">뒤로가기 버튼을 한번 더 누르면 종료됩니다.</string>
     <string name="push_default_channel">72427</string>
+    <string name="default_notification_channel_id">GoWith</string>
 
 
     // splash
@@ -44,8 +45,10 @@
     <string name="noti_param_interface_name">interface_name</string>
     <string name="noti_param_alarm_type">alarm_type</string>
     <string name="noti_param_location">location</string>
-    <string name="noti_param_member_id">member_id</string>
+<!--    <string name="noti_param_member_id">member_id</string>-->
     <string name="noti_param_member_name">member_name</string>
-    <string name="noti_param_shared_maneger_id">shared_manager_id</string>
-    <string name="noti_param_shared_manager_name">shared_manager_name</string>
+<!--    <string name="noti_param_shared_maneger_id">shared_manager_id</string>-->
+<!--    <string name="noti_param_shared_manager_name">shared_manager_name</string>-->
+    <string name="noti_param_ride_manager_phone">ride_manager_phone</string>
+    <string name="noti_param_line_result_id">line_result_id</string>
 </resources>

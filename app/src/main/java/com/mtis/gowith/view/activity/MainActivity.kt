@@ -104,15 +104,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             pushNotiReciver,
             IntentFilter(getString(R.string.str_intent_filer_action_noti))
         )
-
-        val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
-            getString(R.string.str_intent_extra_noti_data)
-        ) as HashMap<String, String?>?
-
-
-        noti_data?.let {
-            collectNotiData(it)
-        }
     }
 
     override fun onStop() {
@@ -135,8 +126,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 ) as HashMap<String, String?>?
 
 
+
                 noti_data?.let {
-                    collectNotiData(it)
+
+                    val name = noti_data.get(getString(R.string.noti_param_interface_name))
+
+                    if(name != null) {
+                        collectNotiData(it)
+                        intent.putExtra(
+                            getString(R.string.str_intent_extra_noti_data),
+                            kotlin.collections.HashMap<String, String?>()
+                        )
+                    }
                 }
             }
         }
@@ -258,6 +259,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
+
+            Log.e(TAG, url.toString())
+
+            if(url != null && url.equals("https://app.gwith.co.kr/")) {
+                val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
+                    getString(R.string.str_intent_extra_noti_data)
+                ) as HashMap<String, String?>?
+
+                noti_data?.let {
+
+                    val name = noti_data.get(getString(R.string.noti_param_interface_name))
+
+                    if (name != null) {
+                        collectNotiData(it)
+                        intent.putExtra(
+                            getString(R.string.str_intent_extra_noti_data),
+                            kotlin.collections.HashMap<String, String?>()
+                        )
+                    }
+                }
+            }
         }
     }
 
