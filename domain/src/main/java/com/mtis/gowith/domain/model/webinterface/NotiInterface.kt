@@ -6,7 +6,7 @@ data class NotiInterface(
     @SerializedName("alaram_type")
     val alaramType:String,
     @SerializedName("location")
-    val location:String,
+    var location:String,
 //    @SerializedName("member_id")
 //    var memberId:String? = null,
     @SerializedName("member_name")

@@ -38,7 +38,7 @@ public class P {
 
 	public static String getServerUrl(Context ctx) {
 		SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-		return preferences.getString("sever_host_url", "https://app.gwith.co.kr/");
+		return preferences.getString("sever_host_url", "https://dev-app.gwith.co.kr/");
 	}
 
 	public static void setServerUrl(Context ctx, String hostUrl) {

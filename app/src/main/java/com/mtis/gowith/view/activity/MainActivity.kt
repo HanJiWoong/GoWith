@@ -32,7 +32,6 @@ import org.xml.sax.helpers.DefaultHandler
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -131,7 +130,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
                     val name = noti_data.get(getString(R.string.noti_param_interface_name))
 
-                    if(name != null) {
+                    if (name != null) {
                         collectNotiData(it)
                         intent.putExtra(
                             getString(R.string.str_intent_extra_noti_data),
@@ -230,16 +229,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.mainWebView.setGson(Gson())
 
         binding.mainWebView.loadUrl("file:///android_asset/demo.html")
+
+        val device: MutableMap<String, String> = HashMap()
+        device["gwithappkey"] = "dpaxltm1@#"
+
         val serverUrl: String = P.getServerUrl(this)
         if (serverUrl == null || serverUrl == "" || !serverUrl.startsWith("http")) shortShowToast("서버 주소가 적합하게 설정되더 있지 않습니다. 현재 서버 주소: $serverUrl")
         else binding.mainWebView.loadUrl(
-            serverUrl
+            serverUrl, device
         )
 
-
         setObserver()
-
-
     }
 
     fun setObserver() {
@@ -255,14 +255,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val webViewClient = object : WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
+
+            Log.e(TAG, "********** Start Page Loading => " + url.toString())
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
 
-            Log.e(TAG, url.toString())
+            Log.e(TAG, "********** End Page Loading => " + url.toString())
 
-            if(url != null && url.equals("https://app.gwith.co.kr/")) {
+            if (url != null && url.equals("https://app.gwith.co.kr/")) {
                 val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
                     getString(R.string.str_intent_extra_noti_data)
                 ) as HashMap<String, String?>?

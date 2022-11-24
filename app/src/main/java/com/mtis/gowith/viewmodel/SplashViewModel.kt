@@ -25,7 +25,7 @@ class SplashViewModel @Inject constructor() : BaseViewModel() {
         android.Manifest.permission.NFC,                            // NFC
 //        android.Manifest.permission.BLUETOOTH,                      // 블루투스
 //        android.Manifest.permission.BLUETOOTH_ADMIN,
-        android.Manifest.permission.READ_CONTACTS,                   // 주소록
+//        android.Manifest.permission.READ_CONTACTS,                   // 주소록
         android.Manifest.permission.CALL_PHONE
     )
 

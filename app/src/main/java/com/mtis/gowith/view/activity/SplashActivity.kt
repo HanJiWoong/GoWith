@@ -49,7 +49,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 shouldShowRequestPermissionRationale(permission) -> {
 
                     showPermissionContextPopup(permission)
-
                 }
                 else -> {
                     requestPermissions(

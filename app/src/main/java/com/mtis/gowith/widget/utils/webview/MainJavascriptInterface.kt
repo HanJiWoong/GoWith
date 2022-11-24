@@ -290,7 +290,6 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         }
     }
 
-
     // BlueTooth On/Off 상태 전달
     @JavascriptInterface
     fun requestBleState(data: String, callbackId: String) {
@@ -387,7 +386,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
     @JavascriptInterface
     fun requestCurrentLocation(data: String, callbackId: String) {
         Log.e(
-            TAG, "[requestBleBeaconTag] " + data + ", callbackId= " +
+            TAG, "[requestCurrentLocation] " + data + ", callbackId= " +
                     callbackId + ", thread= " + Thread.currentThread().name
         )
 
@@ -548,6 +547,21 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                 )
 
                 when (interfaceName) {
+                    context.getString(R.string.web_interface_noti_get_riding_pu) -> {
+                        if(memberName == null || rideManagerPhone == null || location == null) {
+                            throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")
+                        }
+
+                        notiInterface.memberName = memberName
+                        notiInterface.rideManagerPhone = rideManagerPhone
+                        notiInterface.location = location
+
+                        val convert = Gson().toJson(notiInterface)
+
+                        Log.e(TAG, "json Convert result : ${convert}")
+
+                        commonJSCall(funcName = interfaceName, jsonParam = convert)
+                    }
                     context.getString(R.string.web_interface_noti_get_not_riding_pu) -> {
                         if(memberName == null || rideManagerPhone == null) {
                             throw Exception("${interfaceName}의 파라미터에 문제가 있습니다.")

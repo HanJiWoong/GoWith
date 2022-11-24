@@ -36,6 +36,7 @@
     <string name="str_intent_extra_noti_data">NotiData</string>
 
     // web interface
+    <string name="web_interface_noti_get_riding_pu">getRidingPu</string>
     <string name="web_interface_noti_get_not_riding_pu">getNotRidingPu</string>
     <string name="web_interface_noti_get_not_getting_off_pu">getNotGettingOffPu</string>
     <string name="web_interface_noti_get_not_riding_mg_dv">getNotRidingMgDv</string>
