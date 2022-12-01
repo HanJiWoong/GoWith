@@ -41,6 +41,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
     private var mWebView: BridgeWebView? = null
 
     private var mCurLocation: Location? = null
+    private lateinit var mNfcService:Intent
 
     interface MainJavaScriptInterfaceListener {
         fun singlePickPhoto()
@@ -52,6 +53,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
     constructor(
         callbacks: Map<String?, OnBridgeCallback?>?,
         webView: BridgeWebView?,
+        nfcService:Intent,
         listener: MainJavaScriptInterfaceListener,
         context: Context
     ) : super(
@@ -60,6 +62,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         mWebView = webView
         mContext = context
         mListener = listener
+        mNfcService = nfcService
     }
 
 
@@ -133,12 +136,20 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
 
     @JavascriptInterface
     fun recivedMemberId(data:String, callbackId: String) {
-        Log.e(TAG, "[recivedMemberId] " + data + ", callbackId= " +
-                callbackId + ", thread= " + Thread.currentThread().name)
+        Log.e(
+            TAG, "[recivedMemberId] " + data + ", callbackId= " +
+                    callbackId + ", thread= " + Thread.currentThread().name
+        )
 
-        val convert = Gson().fromJson(data,MemberIdResponseInterface::class.java)
-        P.setMemberId(mContext,convert.memberId)
-        NfcHceService.setMemberId(Integer.getInteger(convert.memberId))
+        mContext?.stopService(mNfcService)
+        val convert = Gson().fromJson(data, MemberIdResponseInterface::class.java)
+        P.setMemberId(mContext, convert.memberId)
+//        NfcHceService.setMemberId(Integer.getInteger(convert.memberId))
+
+//
+
+        mNfcService.putExtra("memberId", convert.memberId.toInt())
+        mContext?.startService(mNfcService)
     }
 
     @JavascriptInterface

@@ -93,11 +93,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onStart() {
         super.onStart()
 
-        val memberId = P.getMemberId(this)
-        mHceService = Intent(this@MainActivity, NfcHceService::class.java)
-        mHceService.putExtra("memberId", memberId.toInt())
-        startService(mHceService)
-
         registerReceiver(nfcReceiver, IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED))
         registerReceiver(
             pushNotiReciver,
@@ -202,6 +197,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun init() {
 
+        val memberId = P.getMemberId(this)
+        mHceService = Intent(this@MainActivity, NfcHceService::class.java)
+        mHceService.putExtra("memberId", memberId.toInt())
+        startService(mHceService)
+
         binding.mainWebView.isHorizontalScrollBarEnabled = false
         binding.mainWebView.settings.javaScriptEnabled = true
         binding.mainWebView.settings.setSupportZoom(false)
@@ -222,6 +222,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             MainJavascriptInterface(
                 binding.mainWebView.callbacks,
                 binding.mainWebView,
+                mHceService,
                 jsInterfaceListener,
                 this
             )
