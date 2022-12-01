@@ -36,7 +36,11 @@ public class NfcHceService extends HostApduService {
     private static final byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
     private static final byte[] SELECT_APDU = BuildSelectApdu(SAMPLE_LOYALTY_CARD_AID);
 
-    private int mMemberId;
+    static int mMemberId = 0;
+
+    public static void setMemberId(int memberId) {
+        mMemberId = memberId;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

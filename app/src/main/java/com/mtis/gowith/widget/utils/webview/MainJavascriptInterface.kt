@@ -18,6 +18,7 @@ import com.mtis.gowith.BuildConfig
 import com.mtis.gowith.R
 import com.mtis.gowith.common.BleBeaconService
 import com.mtis.gowith.common.GsonConverter
+import com.mtis.gowith.common.NfcHceService
 import com.mtis.gowith.domain.model.TMapLaunch
 import com.mtis.gowith.domain.model.webinterface.NotiInterface
 import com.mtis.gowith.domain.model.webinterface.call.VersionInfoInterface
@@ -26,6 +27,7 @@ import com.mtis.gowith.domain.model.webinterface.response.CommonResponseInterfac
 import com.mtis.gowith.domain.model.webinterface.call.LocationInterface
 import com.mtis.gowith.domain.model.webinterface.call.StateInterface
 import com.mtis.gowith.domain.model.webinterface.response.CallPhoneResponseInterface
+import com.mtis.gowith.domain.model.webinterface.response.MemberIdResponseInterface
 import com.mtis.gowith.domain.model.webinterface.response.TMapResponseInterface
 import com.mtis.gowith.widget.utils.P
 import com.mtis.gowith.widget.utils.webview.jsbridge.BridgeWebView
@@ -129,6 +131,25 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
         mWebView?.sendResponse(re, callbackId)
     }
 
+    @JavascriptInterface
+    fun recivedMemberId(data:String, callbackId: String) {
+        Log.e(TAG, "[recivedMemberId] " + data + ", callbackId= " +
+                callbackId + ", thread= " + Thread.currentThread().name)
+
+        val convert = Gson().fromJson(data,MemberIdResponseInterface::class.java)
+        P.setMemberId(mContext,convert.memberId)
+        NfcHceService.setMemberId(Integer.getInteger(convert.memberId))
+    }
+
+    @JavascriptInterface
+    fun requestLogoutEvent(data:String, callbackId: String) {
+        Log.e(TAG, "[recivedLogoutEvent] " + data + ", callbackId= " +
+                callbackId + ", thread= " + Thread.currentThread().name)
+
+        P.setMemberId(mContext,"0")
+        NfcHceService.setMemberId(0)
+    }
+
     // Request version info
     @JavascriptInterface
     fun requestVersionInfoFromWeb(data: String, callbackId: String) {
@@ -178,7 +199,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                 val uri = "tmap://route?startx=" + cd.startLong.toString() +
                         "&starty=" + cd.startLat.toString() +
                         "&goalx=" + cd.goalLong.toString() +
-                        "&goaly" + cd.goalLat
+                        "&goaly=" + cd.goalLat
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 mContext?.startActivity(intent)
@@ -189,7 +210,7 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
                     callbackId
                 )
             } else {
-                val uri = "tmap://route?goalx=" + cd.goalLong.toString() + "&goaly" + cd.goalLat
+                val uri = "tmap://route?goalx=" + cd.goalLong.toString() + "&goaly=" + cd.goalLat
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 mContext?.startActivity(intent)
@@ -363,16 +384,21 @@ class MainJavascriptInterface : BridgeWebView.BaseJavascriptInterface {
 
         // 구현부
         try {
+            val convert = Gson().fromJson(data,MemberIdResponseInterface::class.java)
 
-            val memberId = 65535
-            val mBleService: Intent = Intent(mContext, BleBeaconService::class.java)
-            mBleService.putExtra("memberId", memberId)
-            mContext?.startService(mBleService)
-            val obj = CommonInterface(true, null)
-            mWebView?.sendResponse(
-                Gson().toJson(obj),
-                callbackId
-            )
+            val memberId = convert.memberId
+            memberId.let { id ->
+                val mBleService: Intent = Intent(mContext, BleBeaconService::class.java)
+                mBleService.putExtra("memberId", id.toInt())
+                mContext?.startService(mBleService)
+
+                val obj = CommonInterface(true, null)
+                mWebView?.sendResponse(
+                    Gson().toJson(obj),
+                    callbackId
+                )
+            }
+
         } catch (ae: ActivityNotFoundException) {
             val obj = CommonInterface(false, null)
             mWebView?.sendResponse(

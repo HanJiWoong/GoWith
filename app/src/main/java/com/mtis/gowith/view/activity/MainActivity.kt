@@ -93,9 +93,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onStart() {
         super.onStart()
 
-        val memberId = 65535
+        val memberId = P.getMemberId(this)
         mHceService = Intent(this@MainActivity, NfcHceService::class.java)
-        mHceService.putExtra("memberId", memberId)
+        mHceService.putExtra("memberId", memberId.toInt())
         startService(mHceService)
 
         registerReceiver(nfcReceiver, IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED))
@@ -264,7 +264,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
             Log.e(TAG, "********** End Page Loading => " + url.toString())
 
-            if (url != null && url.equals("https://app.gwith.co.kr/")) {
+            if (url != null && url.equals(P.getServerUrl(this@MainActivity))) {
                 val noti_data: HashMap<String, String?>? = intent.getSerializableExtra(
                     getString(R.string.str_intent_extra_noti_data)
                 ) as HashMap<String, String?>?

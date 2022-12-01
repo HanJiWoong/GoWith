@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.webkit.WebSettings;
 
+import java.lang.reflect.Member;
+
 public class P {
+	private static String MemberId = null;
 	private static final String PREFERENCE_NAME = "com.mtis.gowith";
 
 	/*
@@ -57,6 +60,18 @@ public class P {
 		SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putBoolean("use_debug_log_list", isUse);
+		editor.commit();
+	}
+
+	public static String getMemberId(Context ctx) {
+		SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+		return preferences.getString("member_id","0");
+	}
+
+	public static void setMemberId(Context ctx, String memberId) {
+		SharedPreferences preferences = ctx.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putString("member_id", memberId);
 		editor.commit();
 	}
 
